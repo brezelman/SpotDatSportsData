@@ -46,19 +46,19 @@ Die Anwendung setzt sich hauptsächlich aus den drei Komponenten Datenquelle, Da
 
 Da im Haupt-Thread der Activity keine längeren blockierenden Aufgaben erfüllt werden dürfen, ist für die über das Internet stattfindende Datenbeschaffung eine asynchrone Verarbeitung in einem separatem Thread notwendig. Die Activity-Klassen implementieren verschiedene Receiver-Schnittstellen und registrieren sich beim Daten-Provider als Daten-Receiver (siehe Abbildung 3). Im Falle von Problemen bei der Beantwortung der Anfragen, müssen vom Daten-Provider geworfene Exceptions abgefangen bzw. aufgerufene Fehlermethoden implementiert werden.
 
-![Komponenten-Diagramm](/doc/uml/ComponentDiagram1.jpg)<br/>
+![Komponenten-Diagramm](/docs/uml/ComponentDiagram1.jpg)<br/>
 Abbildung 1: Komponentenmodell
 
-![Klassendiagramm](/doc/uml/ClassDiagramModelAnalysis.jpg)<br/>
+![Klassendiagramm](/docs/uml/ClassDiagramModelAnalysis.jpg)<br/>
 Abbildung 2: Klassenmodell der Model-Komponente
 
-![Klassendiagramm](/doc/uml/ClassDiagram_Interfaces.jpg)<br/>
+![Klassendiagramm](/docs/uml/ClassDiagram_Interfaces.jpg)<br/>
 Abbildung 3: Schnittstellen
 
 ### Verfügbare Wettbewerbe
 Die Implementierung wurde mit der Auslese und Anzeige verfügbarer Wettbewerbe begonnen. Die dazugehörige _MainActivity_ stellt den Eingangpunkt der App dar (siehe Abbildung 4). Sie implementiert die Schnittstelle _CompetitionsReceiver_. Das Layout dieser Activity besteht ausschließlich aus der Liste der Wettbewerbe. Ein Klick auf einen Wettbewerb bringt den Benutzer weiter zur Wettbewerbs-Ansicht.
 
-![Screenshot](/doc/screenshots/Screenshot_MainActivity.png)<br/>
+![Screenshot](/docs/screenshots/Screenshot_MainActivity.png)<br/>
 Abbildung 4: MainActivity mit der Liste verfügbarer Wettbewerbe
 
 ### Spieltage
@@ -66,13 +66,13 @@ Die Wettbewerbs-Ansicht entsprach anfangs einer Activity mit der Auflistung der 
 
 Hierzu wurde eine passende Lösung gefunden. Somit wird nach der Auswahl des Wettbewerbs in der _MainActivity_ direkt eine _MatchdayActivity_ geladen, die die Daten des aktuellen Spieltages des Wettbewerbs angezeigt. Der nächste bzw. vorherige Spieltag können direkt in der _MatchdayActivity_ angesteuert und angezeigt werden. Genauer wird dies im nächsten Kapitel (2.5) beschrieben. Die Bedienbarkeit ist somit aber immer noch nicht optimal. Will ein Benutzer z.B. im Moment, in dem der 1. Spieltag eines Wettbewerbs aktuell ist, wissen, wie die Begegnungen des 34. Spieltages lauten, so müsste er entsprechend 33 mal den nächsten Spieltag ansteuern. Erst dann würde er seine gewünschten Informationen erhalten. Um dies zu erleichtern wurde in der _MainActivity_ ein Menü eingefügt, welches beim langen Klicken auf einen Wettbewerb erscheint. Dieses Kontextmenü lädt daraufhin die Spieltage des gewählten Wettbewerbs und zeigt sie an (siehe Abbildung 5). Die _MainActivity_ implementiert deswegen außer der _CompetitionsReceiver_-Schnittstelle auch die _MatchdaysReceiver_-Schnittstelle. Bei Auswahl eines Spieltages im Menü wird dieser per Extra-Objekt an das Start-Intent der _MatchdayActivity_ angehägt, welche dann entsprechend direkt den übergebenen Spieltag anzeigt.
 
-![Screenshot](/doc/screenshots/Screenshot_CompetitionMatchdayMenu.png)<br/>
+![Screenshot](/docs/screenshots/Screenshot_CompetitionMatchdayMenu.png)<br/>
 Abbildung 5: Auswahl des anzuzeigenden Spieltags über ein Kontextmenü
 
 ### Spielbegegnungen
 Wie bereits erwähnt wird in der _MatchdayActivity_ (siehe Abbildung 6) beim Start standardmäßig die Begegnungen des aktuellen Spieltages aufgelistet. Zur Bestimmung des aktuellen Spieltages ist eine Anfrage an die Datenquelle (OpenLigaDB) vonnöten, weshalb die Activity die _CurrentMatchdayReceiver_-Schnittstelle implementiert. Ist per Intent ein spezieller Spieltag übergeben worden, wird dieser Spieltag beim Start geladen. Das Empfangen der Spielbegegnungsdaten erfolgt über Implementierung der _MatchesReceiver_-Schnittstelle. Die Verwendung des <i>ViewPager</i>s ermöglicht den komfortablen Wechsel zum vorherigen bzw. nachfolgenden Spieltag per Swipe (zur Seite Schieben) nach rechts bzw. links. Die Anzeige des aktuellen bzw. vorherigen/folgenden Spieltages erfolgt in einem sogenannten _PagerTitleStrip_.
 
-![Screenshot](/doc/screenshots/Screenshot_MatchdayActivity.png)<br/>
+![Screenshot](/docs/screenshots/Screenshot_MatchdayActivity.png)<br/>
 Abbildung 6: MatchdayActivity
 
 Damit auch in dieser Activity ein schneller Wechsel zu einem spezifischen Spieltag möglich ist wird im _OptionsMenu_ der Zugriff zu einem Spieltag nach Wahl zur Verfügung gestellt. Hier erfolgt die Anzeige des ausgewählten Spieltages einfach durch Aufruf der _setCurrentItem_-Methode des <i>ViewPager</i>s.
@@ -86,7 +86,7 @@ Bei langem Klick auf eine Spielbegegnung wird dem Benutzer per _Contextual Actio
 ### Spielbegegnungsdetails
 Die _MatchActivity_ zeigt außer der aus der _MatchdayActivity_ bekannten Daten der Begegnung Austragungszeitpunkt, Austragungsort und, falls vorhanden, Informationen über Reihenfolge, Zeitpunkt und evtl. Torschütze eines Tores an (siehe Abbildung 7). Zur Anzeige der aus der _MatchdayActivity_ bekannten allgemeinen Daten wird das in _listitem_match.xml_ definierte Layout wiederverwendet. Die Anstoß- bzw. Startzeit der Begegnung wird wie der Veranstaltungsort in einer einfachen _TextView_, die Tore in einer _ListView_, dargestellt. Zum Erhalt der Tordaten wird die _MatcheventsReceiver_-Schnittstelle implementiert. Definiert ist das ganze im Layout _activity_match.xml_. Hier ist des Weiteren noch eine _ListView_ für eine evtl. später folgende Anzeige von vorhergehenden Begegnungen der beiden Kontrahenten vorgesehen.
 
-![Screenshot](/doc/screenshots/Screenshot_MatchActivity.png)<br/>
+![Screenshot](/docs/screenshots/Screenshot_MatchActivity.png)<br/>
 Abbildung 7: MatchActivity
 
 ## Abschlussbetrachtung
